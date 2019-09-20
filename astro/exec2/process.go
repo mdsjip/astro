@@ -26,8 +26,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
 	"github.com/uber/astro/astro/logger"
+	"go.uber.org/multierr"
 )
 
 // NewProcess creates a new process, given the configuration. It does
@@ -136,11 +136,7 @@ func (p *Process) Run() error {
 				if err := process.Signal(sig); err != nil {
 					// Not clear how we can hit this, but probably not
 					// worth terminating the child.
-					if errors != nil {
-						errors = multierror.Append(errors, err)
-					} else {
-						errors = err
-					}
+					errors = multierr.Append(errors, err)
 				}
 			case err := <-waitCh:
 				// Record run time
@@ -148,11 +144,7 @@ func (p *Process) Run() error {
 				logger.Trace.Printf("exec2: command exit code: %v\n", p.ExitCode())
 				// Return an error, if the command didn't exit with a success code
 				if !p.Success() {
-					if errors != nil {
-						errors = multierror.Append(errors, err)
-					} else {
-						errors = err
-					}
+					errors = multierr.Append(errors, err)
 					return fmt.Errorf("%s%v", p.Stderr().String(), errors)
 				}
 				return errors

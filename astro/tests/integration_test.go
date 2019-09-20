@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/uber/astro/astro/utils"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -27,8 +28,6 @@ import (
 	"regexp"
 	"testing"
 	"time"
-
-	"github.com/uber/astro/astro/utils"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
